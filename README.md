@@ -7,13 +7,12 @@ Run [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with `--danger
 - **Isolated environment**: Claude Code runs in a sandboxed Docker container with limited host access
 - **Dev Container support**: Full VS Code integration via Dev Containers
 - **Pre-installed tools**: Node.js 22, Python 3, gh CLI, git, ripgrep, and build essentials
-- **Auth inheritance**: Mounts `~/.claude` from host so you authenticate once, reuse everywhere
+- **Persistent authentication**: Auth persists across container restarts via mounted `~/.claude` directory
 - **Lightweight base**: Debian bookworm-slim (~1GB final image)
 
 ## Prerequisites
 
 - Docker and Docker Compose
-- Claude Code authenticated on your host machine (run `claude` on your host to authenticate)
 - (Optional) VS Code with Dev Containers extension
 
 ## Quick Start
@@ -21,10 +20,13 @@ Run [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with `--danger
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd claude-code-scaffold
+cd terrarium
 
 # Start the container and launch Claude Code
 ./start.sh --claude
+
+# Authenticate when prompted (first time only)
+# Choose "Claude account with subscription" and complete browser login
 
 # Or start the container and get a shell
 ./start.sh --shell
@@ -83,7 +85,7 @@ claude-code-scaffold/
 ## How It Works
 
 - **Workspace isolation**: The `./workspace` directory on your host is bind-mounted to `/workspace` inside the container. Claude Code can only access files in this directory, not your entire filesystem.
-- **Authentication**: Your `~/.claude` directory is mounted read-write so the container inherits your Claude authentication. No need to re-login.
+- **Authentication**: Your `~/.claude` directory is mounted so authentication persists across container restarts. Authenticate once inside the container (via browser), and you won't need to re-login.
 - **Permissions**: Claude Code runs with `--dangerously-skip-permissions` inside the container, but this only affects the sandboxed environment, not your host system.
 
 ## Installed Tools
@@ -103,8 +105,8 @@ claude-code-scaffold/
 ./start.sh --build
 ```
 
-**Claude Code shows "not authenticated":**
-Make sure you've run `claude` on your host machine first to authenticate via browser.
+**First time setup:**
+Run `./start.sh --claude` and authenticate via browser when prompted. Choose "Claude account with subscription" and complete the login. Your authentication will persist across container restarts.
 
 **Python command not found:**
 The container symlinks `python` → `python3`. If you rebuilt an old version, run `./start.sh --build` to update.
