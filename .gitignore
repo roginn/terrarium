@@ -1,0 +1,5 @@
+# User workspace - each user creates their own content
+workspace/
+
+# Optional .env file with user-specific tokens
+.env
