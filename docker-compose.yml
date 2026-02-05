@@ -1,0 +1,12 @@
+services:
+  claude-sandbox:
+    build: .
+    container_name: claude-sandbox
+    init: true
+    volumes:
+      - ${WORKSPACE_DIR:-./workspace}:/workspace
+      - ${HOME}/.claude:/home/dev/.claude
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+    stdin_open: true
+    tty: true
