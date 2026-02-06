@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
     ripgrep \
     fd-find \
+    openssh-client \
     ca-certificates \
     gnupg \
     python3 \
@@ -59,4 +60,6 @@ USER dev
 RUN curl -fsSL https://claude.ai/install.sh | bash
 ENV PATH="/home/dev/.local/bin:${PATH}"
 
+COPY --chown=dev:dev entrypoint.sh /home/dev/entrypoint.sh
+ENTRYPOINT ["/home/dev/entrypoint.sh"]
 CMD ["sleep", "infinity"]

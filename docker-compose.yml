@@ -6,6 +6,7 @@ services:
     volumes:
       - ${WORKSPACE_DIR:-./workspace}:/workspace
       - ${HOME}/.claude:/home/dev/.claude
+      - ${HOME}/.gitconfig:/home/dev/.gitconfig-host:ro
     environment:
       - GITHUB_TOKEN=${GITHUB_TOKEN:-}
     stdin_open: true

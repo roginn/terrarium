@@ -56,13 +56,38 @@ The `start.sh` script provides several options:
 3. VS Code will attach to the running container with full IDE features
 4. Files in `/workspace` are shared between the container and the host
 
-## Configuration
+## GitHub Authentication
 
-Optional environment variables can be set in a `.env` file (see `.env.example`):
+To let Claude Code push/pull and use `gh` inside the container, create a **fine-grained Personal Access Token** (PAT):
+
+1. Go to [GitHub → Settings → Developer settings → Fine-grained tokens](https://github.com/settings/tokens?type=beta)
+2. Click **Generate new token**
+3. Set a name (e.g., "terrarium") and expiration (90 days recommended)
+4. Under **Repository access**, select only the repos you need
+5. Under **Permissions → Repository permissions**, grant:
+   - **Contents**: Read and write (for git push/pull)
+   - **Pull requests**: Read and write (if you want Claude to create PRs)
+   - **Issues**: Read and write (if you want Claude to manage issues)
+6. Generate the token and add it to your `.env` file:
 
 ```bash
-# Optional: GitHub token for gh CLI authentication
-GITHUB_TOKEN=ghp_...
+GITHUB_TOKEN=github_pat_...
+```
+
+The container automatically configures both `gh` and `git` to use this token on startup. The token is never written to disk inside the container.
+
+**Security notes:**
+- Fine-grained PATs are scoped to specific repos and permissions — if compromised, the blast radius is limited
+- Set an expiration and rotate periodically
+- Revoke immediately at [github.com/settings/tokens](https://github.com/settings/tokens) if you suspect a leak
+
+## Configuration
+
+Environment variables can be set in a `.env` file (see `.env.example`):
+
+```bash
+# GitHub fine-grained PAT (see "GitHub Authentication" above)
+GITHUB_TOKEN=github_pat_...
 
 # Optional: Host directory to mount as /workspace (defaults to ./workspace)
 WORKSPACE_DIR=./workspace
@@ -74,6 +99,7 @@ WORKSPACE_DIR=./workspace
 claude-code-scaffold/
 ├── Dockerfile                   # Container image definition
 ├── docker-compose.yml           # Container orchestration
+├── entrypoint.sh                # Container startup (configures GitHub auth)
 ├── .devcontainer/
 │   └── devcontainer.json        # VS Code Dev Container config
 ├── start.sh                     # Convenience script
