@@ -20,7 +20,7 @@ Run [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with `--danger
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd terrarium
+cd enclaude
 
 # Start the container and launch Claude Code
 ./start.sh --claude
@@ -62,7 +62,7 @@ To let Claude Code push/pull and use `gh` inside the container, create a **fine-
 
 1. Go to [GitHub → Settings → Developer settings → Fine-grained tokens](https://github.com/settings/tokens?type=beta)
 2. Click **Generate new token**
-3. Set a name (e.g., "terrarium") and expiration (90 days recommended)
+3. Set a name (e.g., "enclaude") and expiration (90 days recommended)
 4. Under **Repository access**, select only the repos you need
 5. Under **Permissions → Repository permissions**, grant:
    - **Contents**: Read and write (for git push/pull)
@@ -96,7 +96,7 @@ WORKSPACE_DIR=./workspace
 ## File Structure
 
 ```
-claude-code-scaffold/
+enclaude/
 ├── Dockerfile                   # Container image definition
 ├── docker-compose.yml           # Container orchestration
 ├── entrypoint.sh                # Container startup (configures GitHub auth)
